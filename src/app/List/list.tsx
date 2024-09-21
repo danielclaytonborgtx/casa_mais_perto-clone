@@ -1,6 +1,7 @@
 // src/listScreen.tsx
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, } from 'react-native';
+import { styles } from './styles';
 
 const ListScreen: React.FC = () => {
   return (
@@ -10,12 +11,5 @@ const ListScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
 
 export default ListScreen;
