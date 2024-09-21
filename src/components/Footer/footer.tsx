@@ -16,7 +16,7 @@ const Footer: React.FC = () => {
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigateTo('MapScreen')} // Ajuste a rota aqui
+        onPress={() => navigateTo('/map')} // Ajuste a rota aqui
         accessibilityLabel="Navegar para o Mapa"
         activeOpacity={0.8}
       >
@@ -27,7 +27,7 @@ const Footer: React.FC = () => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigateTo('ListScreen')} // Ajuste a rota aqui
+        onPress={() => navigateTo('/list')} // Ajuste a rota aqui
         accessibilityLabel="Navegar para a Lista"
         activeOpacity={0.8}
       >

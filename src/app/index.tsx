@@ -1,27 +1,12 @@
 import React from 'react';
-import { StyleSheet, ScrollView, SafeAreaView } from 'react-native';
-import Header from '../components/Header/header';
-import Footer from '../components/Footer/footer';
+import { Text, View } from 'react-native';
 
-const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const Index = () => {
   return (
-    <SafeAreaView style={styles.container}>
-      <Header />
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {children}
-      </ScrollView>
-      <Footer />
-    </SafeAreaView>
+    <View>
+      <Text>Conteúdo da tela inicial</Text>
+    </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  scrollContainer: {
-    flexGrow: 1,
-  },
-});
-
-export default AppLayout;
+export default Index;

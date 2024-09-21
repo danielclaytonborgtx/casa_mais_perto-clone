@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Modal from '../modal'; // Certifique-se de que o caminho está correto
-import { styles } from './styles';
+import Modal from '../Modal/modal'; // Certifique-se de que o caminho está correto
+import { styles } from './styles'
 
 const Header: React.FC = () => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -21,11 +21,10 @@ const Header: React.FC = () => {
         placeholder="Buscar mais perto"
         placeholderTextColor="#888"
       />
-      {isModalVisible && <Modal onClose={toggleModal} />}
+      <Modal visible={isModalVisible} onClose={toggleModal} />
     </View>
   );
 };
-
 
 
 export default Header;
