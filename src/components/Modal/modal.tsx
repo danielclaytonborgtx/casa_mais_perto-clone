@@ -9,18 +9,20 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ visible, onClose }) => {
-  const slideAnim = useRef(new Animated.Value(-300)).current;
+  const slideAnim = useRef(new Animated.Value(-300)).current; // Começa fora da tela à esquerda
 
   useEffect(() => {
     if (visible) {
+      // Animação para abrir o modal
       Animated.timing(slideAnim, {
-        toValue: 0,
+        toValue: 0, // Anima para a posição 0 (visível)
         duration: 300,
         useNativeDriver: true,
       }).start();
     } else {
+      // Animação para fechar o modal
       Animated.timing(slideAnim, {
-        toValue: -300,
+        toValue: -300, // Anima para fora da tela à esquerda
         duration: 300,
         useNativeDriver: true,
       }).start();
