@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Modal as RNModal, View, Text, TouchableOpacity, Animated } from 'react-native';
 import { styles } from './styles';
 import { User as IconUser } from 'lucide-react-native';
+import { useRouter } from 'expo-router';
 
 interface ModalProps {
   visible: boolean;
@@ -10,6 +11,7 @@ interface ModalProps {
 
 const Modal: React.FC<ModalProps> = ({ visible, onClose }) => {
   const slideAnim = useRef(new Animated.Value(-300)).current; // Começa fora da tela à esquerda
+  const router = useRouter();
 
   useEffect(() => {
     if (visible) {
@@ -29,6 +31,11 @@ const Modal: React.FC<ModalProps> = ({ visible, onClose }) => {
     }
   }, [visible]);
 
+  const handleNavigation = (route: string) => {
+    router.push(route as any); // Usando type assertion
+    onClose(); // Fecha o modal
+  };
+
   return (
     <RNModal
       transparent={true}
@@ -38,15 +45,15 @@ const Modal: React.FC<ModalProps> = ({ visible, onClose }) => {
       <TouchableOpacity style={styles.container} onPress={onClose}>
         <Animated.View style={[styles.modalContent, { transform: [{ translateX: slideAnim }] }]}>
           <View style={styles.sidebar}>
-            <TouchableOpacity onPress={() => { /* Lógica de login */ }} style={styles.sidebarItemContainer}>
-              <IconUser size={24} color="black" />
-              <Text style={styles.sidebarItem}>Login</Text>
+            <TouchableOpacity onPress={() => handleNavigation('/Login/login')} style={styles.button}>
+              <IconUser size={24} color="white" />
+              <Text style={styles.buttonText}>Login</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => {}} style={styles.sidebarItemContainer}>
-              <Text style={styles.sidebarItem}>Sobre nós</Text>
+            <TouchableOpacity onPress={() => handleNavigation('/SobreNos')} style={styles.button}>
+              <Text style={styles.buttonText}>Sobre nós</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => { /* Lógica de contato */ }} style={styles.sidebarItemContainer}>
-              <Text style={styles.sidebarItem}>Contato</Text>
+            <TouchableOpacity onPress={() => handleNavigation('/Contato')} style={styles.button}>
+              <Text style={styles.buttonText}>Contato</Text>
             </TouchableOpacity>
           </View>
         </Animated.View>

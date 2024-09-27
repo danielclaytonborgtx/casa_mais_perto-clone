@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
   modalContent: {
     width: '50%', // Largura do modal
     height: '80%', // Ajuste a altura para não cobrir o header e footer
-    backgroundColor: 'lightgray',
+    backgroundColor: '#DCDCDC',
     padding: 20,
     borderTopRightRadius: 10,
     borderBottomRightRadius: 10,
@@ -18,26 +18,22 @@ export const styles = StyleSheet.create({
     left: 0, // Para começar na esquerda
     top: '10%', // Para dar um espaço do topo
   },
-  closeButton: {
-    alignSelf: 'flex-end',
-    marginBottom: 10,
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#A9A9A9', // Cor do botão
+    padding: 20,
+    borderRadius: 5,
+    marginVertical: 2,
+    width: '100%', // Para ocupar toda a largura
   },
-  closeText: {
-    fontSize: 24,
-    color: 'black',
+  buttonText: {
+    color: 'white', // Cor do texto do botão
+    marginLeft: 10, // Espaçamento entre o ícone e o texto
+    fontSize: 18,
   },
   sidebar: {
     flex: 1,
     justifyContent: 'flex-start', // Alinha os itens ao topo
-  },
-  sidebarItem: {
-    fontSize: 18,
-    marginVertical: 10,
-    padding: 10, // Adiciona um pouco de espaço ao redor dos itens
-  },
-  sidebarItemContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 10,
   },
 });

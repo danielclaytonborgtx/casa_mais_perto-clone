@@ -14,7 +14,7 @@ const Header: React.FC = () => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.menuButton} onPress={toggleModal}>
-        <Ionicons name="menu" size={60} color="black" />
+        <Ionicons name="menu" size={60} color="gray" />
       </TouchableOpacity>
       <TextInput
         style={styles.searchInput}

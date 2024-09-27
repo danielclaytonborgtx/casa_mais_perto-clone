@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
-    backgroundColor: '#39aff8',
+    backgroundColor: '#A9A9A9',
     padding: 10,
     borderRadius: 10,
     alignItems: 'center',
