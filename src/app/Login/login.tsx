@@ -12,6 +12,14 @@ const Login = () => {
     console.log('Password:', password);
   };
 
+  const handleCreateAccount = () => {
+    console.log('Redirecionar para criação de conta');
+  };
+
+  const handleLoginWithGoogle = () => {
+    console.log('Login com Google');
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Entrar</Text>
@@ -32,6 +40,14 @@ const Login = () => {
       />
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Entrar</Text>
+      </TouchableOpacity>
+
+      {/* Textos para criar conta e login com Google */}
+      <TouchableOpacity onPress={handleCreateAccount}>
+        <Text style={styles.linkText}>Criar Conta</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={handleLoginWithGoogle}>
+        <Text style={styles.linkText}>Entrar com Google</Text>
       </TouchableOpacity>
     </View>
   );

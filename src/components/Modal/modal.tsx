@@ -49,6 +49,15 @@ const Modal: React.FC<ModalProps> = ({ visible, onClose }) => {
               <IconUser size={24} color="white" />
               <Text style={styles.buttonText}>Login</Text>
             </TouchableOpacity>
+            <TouchableOpacity onPress={() => handleNavigation('/')} style={styles.button}>
+              <Text style={styles.buttonText}>Home</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => handleNavigation('/Map/map')} style={styles.button}>
+              <Text style={styles.buttonText}>Mapa</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => handleNavigation('/List/list')} style={styles.button}>
+              <Text style={styles.buttonText}>Lista</Text>
+            </TouchableOpacity>
             <TouchableOpacity onPress={() => handleNavigation('/SobreNos')} style={styles.button}>
               <Text style={styles.buttonText}>Sobre nós</Text>
             </TouchableOpacity>
