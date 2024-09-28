@@ -8,9 +8,9 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 3,
-    backgroundColor: '#fff',
+    backgroundColor: '#FF7F50',
     borderTopWidth: 1,
-    borderTopColor: '#ddd',
+    borderTopColor: '#000000',
     position: 'absolute',
     bottom: 0,
     left: 0,
@@ -18,7 +18,6 @@ export const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
-    backgroundColor: '#A9A9A9',
     padding: 10,
     borderRadius: 10,
     alignItems: 'center',
@@ -30,7 +29,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: {
-    color: 'white',
+    color: '#000000',
     marginLeft: 8,
     fontSize: 16,
   },

@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
   modalContent: {
     width: '50%', // Largura do modal
     height: '80%', // Ajuste a altura para não cobrir o header e footer
-    backgroundColor: '#DCDCDC',
+    backgroundColor: '#FFA07A',
     padding: 20,
     borderTopRightRadius: 10,
     borderBottomRightRadius: 10,
@@ -21,14 +21,15 @@ export const styles = StyleSheet.create({
   button: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#A9A9A9', // Cor do botão
+    // backgroundColor: '#FF7F50', // Cor do botão
     padding: 20,
     borderRadius: 5,
+    
     marginVertical: 2,
     width: '100%', // Para ocupar toda a largura
   },
   buttonText: {
-    color: 'white', // Cor do texto do botão
+    color: 'black', // Cor do texto do botão
     marginLeft: 10, // Espaçamento entre o ícone e o texto
     fontSize: 18,
   },

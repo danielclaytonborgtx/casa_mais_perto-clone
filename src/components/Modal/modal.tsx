@@ -46,7 +46,7 @@ const Modal: React.FC<ModalProps> = ({ visible, onClose }) => {
         <Animated.View style={[styles.modalContent, { transform: [{ translateX: slideAnim }] }]}>
           <View style={styles.sidebar}>
             <TouchableOpacity onPress={() => handleNavigation('/Login/login')} style={styles.button}>
-              <IconUser size={24} color="white" />
+              <IconUser size={24} color="black" />
               <Text style={styles.buttonText}>Login</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => handleNavigation('/')} style={styles.button}>
@@ -58,10 +58,10 @@ const Modal: React.FC<ModalProps> = ({ visible, onClose }) => {
             <TouchableOpacity onPress={() => handleNavigation('/List/list')} style={styles.button}>
               <Text style={styles.buttonText}>Lista</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleNavigation('/SobreNos')} style={styles.button}>
+            <TouchableOpacity onPress={() => handleNavigation('/AboutUs/aboutUs')} style={styles.button}>
               <Text style={styles.buttonText}>Sobre nós</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleNavigation('/Contato')} style={styles.button}>
+            <TouchableOpacity onPress={() => handleNavigation('/Contat/contat')} style={styles.button}>
               <Text style={styles.buttonText}>Contato</Text>
             </TouchableOpacity>
           </View>

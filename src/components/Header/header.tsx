@@ -14,12 +14,12 @@ const Header: React.FC = () => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.menuButton} onPress={toggleModal}>
-        <Ionicons name="menu" size={60} color="gray" />
+        <Ionicons name="menu" size={60} color="black" />
       </TouchableOpacity>
       <TextInput
         style={styles.searchInput}
         placeholder="Buscar mais perto"
-        placeholderTextColor="#888"
+        placeholderTextColor="black"
       />
       <Modal visible={isModalVisible} onClose={toggleModal} />
     </View>

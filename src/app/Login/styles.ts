@@ -11,18 +11,18 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-    color: '#808080',
+    color: '#000000',
   },
   input: {
     width: '100%',
     padding: 10,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#000000',
     borderRadius: 5,
     marginBottom: 10,
   },
   button: {
-    backgroundColor: '#A9A9A9',
+    backgroundColor: '#00FF00',
     padding: 15,
     borderRadius: 5,
     width: '100%',
@@ -30,11 +30,11 @@ const styles = StyleSheet.create({
     marginBottom: 20, // Adiciona um espaço maior antes dos links
   },
   buttonText: {
-    color: 'white',
+    color: '#000000',
     fontSize: 16,
   },
   linkText: {
-    color: '#A9A9A9',
+    color: '#090909',
     fontSize: 14,
     marginBottom: 10, // Espaço entre os links
     textDecorationLine: 'none',
