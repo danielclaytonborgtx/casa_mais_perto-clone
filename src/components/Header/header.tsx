@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TextInput, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Modal from '../Modal/modal'; // Certifique-se de que o caminho está correto
 import { styles } from './styles'
@@ -9,6 +9,11 @@ const Header: React.FC = () => {
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
+  };
+
+  const handleAddProduct = () => {
+    // Ação para adicionar um produto
+    console.log('Adicionar produto');
   };
 
   return (
@@ -21,10 +26,12 @@ const Header: React.FC = () => {
         placeholder="Buscar mais perto"
         placeholderTextColor="black"
       />
+      <TouchableOpacity style={styles.addButton} onPress={handleAddProduct}>
+        <Ionicons name="add" size={40} color="black" />
+      </TouchableOpacity>
       <Modal visible={isModalVisible} onClose={toggleModal} />
     </View>
   );
 };
-
 
 export default Header;
