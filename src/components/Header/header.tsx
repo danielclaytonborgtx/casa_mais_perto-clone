@@ -27,7 +27,7 @@ const Header: React.FC = () => {
         placeholderTextColor="black"
       />
       <TouchableOpacity style={styles.addButton} onPress={handleAddProduct}>
-        <Ionicons name="add" size={40} color="black" />
+        <Ionicons name="add" size={40} color="black" style={{ transform: [{ scale: 1.3 }] }}/>
       </TouchableOpacity>
       <Modal visible={isModalVisible} onClose={toggleModal} />
     </View>
