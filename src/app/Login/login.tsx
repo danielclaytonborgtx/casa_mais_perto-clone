@@ -1,15 +1,29 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import styles from './styles';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false); // Estado de carregamento
 
   const handleLogin = () => {
-    // lógica de login
+    // Validação simples
+    if (!email || !password) {
+      Alert.alert('Erro', 'Por favor, preencha todos os campos.');
+      return;
+    }
+    
+    setLoading(true); // Inicia o carregamento
     console.log('Email:', email);
     console.log('Password:', password);
+    
+    // Simulação de uma chamada assíncrona para login
+    setTimeout(() => {
+      setLoading(false); // Para o carregamento
+      Alert.alert('Sucesso', 'Login realizado com sucesso!');
+      // Aqui você pode redirecionar o usuário após o login
+    }, 2000); // Simulando tempo de carregamento
   };
 
   const handleCreateAccount = () => {
@@ -38,8 +52,12 @@ const Login = () => {
         value={password}
         onChangeText={setPassword}
       />
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Entrar</Text>
+      <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
+        {loading ? (
+          <ActivityIndicator size="small" color="#FFFFFF" /> // Carregador enquanto faz login
+        ) : (
+          <Text style={styles.buttonText}>Entrar</Text>
+        )}
       </TouchableOpacity>
 
       {/* Textos para criar conta e login com Google */}

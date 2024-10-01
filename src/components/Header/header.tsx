@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Modal from '../Modal/modal'; // Certifique-se de que o caminho está correto
-import { styles } from './styles'
+import Modal from '../Modal/modal';
+import { useRouter } from 'expo-router';
+import { styles } from './styles';
 
 const Header: React.FC = () => {
   const [isModalVisible, setModalVisible] = useState(false);
+  const router = useRouter();
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
 
   const handleAddProduct = () => {
-    // Ação para adicionar um produto
+    router.push('/AddProduct/addProduct');
     console.log('Adicionar produto');
   };
 
