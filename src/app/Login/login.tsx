@@ -1,72 +1,54 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
-import styles from './styles';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Button, Alert, StyleSheet } from 'react-native';
+import * as Google from 'expo-auth-session/providers/google';
+import Constants from 'expo-constants';
+import { styles } from './styles';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false); // Estado de carregamento
+  const [clientId, setClientId] = useState<string | null>(null); // Permite que o clientId seja null inicialmente
 
-  const handleLogin = () => {
-    // Validação simples
-    if (!email || !password) {
-      Alert.alert('Erro', 'Por favor, preencha todos os campos.');
-      return;
+  useEffect(() => {
+    const androidClientId = Constants.expoConfig?.extra?.ANDROID_CLIENT_ID;
+    const webClientId = Constants.expoConfig?.extra?.WEB_CLIENT_ID;
+
+    // Verifica e configura o clientId dependendo da plataforma
+    if (androidClientId) {
+      setClientId(androidClientId);
+    } else if (webClientId) {
+      setClientId(webClientId);
+    } else {
+      console.error('ClientId não está definido corretamente.');
+      Alert.alert('Erro', 'ClientId não foi configurado corretamente.');
     }
-    
-    setLoading(true); // Inicia o carregamento
-    console.log('Email:', email);
-    console.log('Password:', password);
-    
-    // Simulação de uma chamada assíncrona para login
-    setTimeout(() => {
-      setLoading(false); // Para o carregamento
-      Alert.alert('Sucesso', 'Login realizado com sucesso!');
-      // Aqui você pode redirecionar o usuário após o login
-    }, 2000); // Simulando tempo de carregamento
-  };
+  }, []);
 
-  const handleCreateAccount = () => {
-    console.log('Redirecionar para criação de conta');
-  };
+  // Somente cria a request se o clientId estiver definido
+  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+    clientId: clientId || '', // Garante que nunca passamos null, usando uma string vazia como fallback
+  });
 
-  const handleLoginWithGoogle = () => {
-    console.log('Login com Google');
-  };
+  useEffect(() => {
+    if (response?.type === 'success') {
+      const { id_token } = response.params;
+      Alert.alert('Login realizado com sucesso!', `Token: ${id_token}`);
+    } else if (response?.type === 'error') {
+      Alert.alert('Erro', 'Falha na autenticação.');
+    }
+  }, [response]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Entrar</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        placeholderTextColor="#aaa"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Senha"
-        placeholderTextColor="#aaa"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
-      <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
-        {loading ? (
-          <ActivityIndicator size="small" color="#FFFFFF" /> // Carregador enquanto faz login
-        ) : (
-          <Text style={styles.buttonText}>Entrar</Text>
-        )}
-      </TouchableOpacity>
-
-      {/* Textos para criar conta e login com Google */}
-      <TouchableOpacity onPress={handleCreateAccount}>
-        <Text style={styles.linkText}>Criar Conta</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={handleLoginWithGoogle}>
-        <Text style={styles.linkText}>Entrar com Google</Text>
-      </TouchableOpacity>
+      {clientId ? (
+        <Button
+          disabled={!request}
+          title="Continuar com Google"
+          onPress={() => promptAsync()}
+        />
+      ) : (
+        <Text>Carregando configurações...</Text>
+      )}
+      <Text style={styles.smallText}>Logar com Google</Text>
     </View>
   );
 };

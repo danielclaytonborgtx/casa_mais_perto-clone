@@ -32,14 +32,24 @@ const styles = StyleSheet.create({
   },
   map: {
     width: '100%',
-    height: 200, // Defina a altura do mapa
-    marginBottom: 10,
+    height: 300, // Aumente a altura do mapa
+    marginBottom: 20, // Adicione um espaço abaixo do mapa
   },
   button: {
     backgroundColor: '#00FF00',
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
+    marginTop: 20, // Aumente o espaço acima do botão
+  },
+  imageButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#00FF00', // Cor do botão
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
   },
   buttonText: {
     color: '#000000',

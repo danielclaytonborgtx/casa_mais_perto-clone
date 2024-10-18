@@ -31,6 +31,13 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "ANDROID_CLIENT_ID": "468088106800-vrpeq16jtc739ngvvvf3a8mrdbpd5is5.apps.googleusercontent.com",
+      "WEB_CLIENT_ID": "468088106800-u09gf684knj0hmb1h3f6lg8pjvvfmite.apps.googleusercontent.com",
+      "eas": {
+        "projectId": "fcdf2149-d82a-4067-9ac5-fd74ff25aaf0"
+      }
     }
   }
 }
