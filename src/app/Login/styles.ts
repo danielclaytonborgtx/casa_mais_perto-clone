@@ -13,6 +13,22 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 20,
   },
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#007bff',
+    padding: 10,
+    borderRadius: 5,
+  },
+  buttonDisabled: {
+    backgroundColor: '#cccccc',
+  },
+  buttonText: {  // Aqui está o novo estilo
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+    textAlign: 'center',
+  },
   smallText: {
     fontSize: 12,
     color: '#555',
@@ -20,5 +36,3 @@ export const styles = StyleSheet.create({
     marginTop: 10,
   },
 });
-
-

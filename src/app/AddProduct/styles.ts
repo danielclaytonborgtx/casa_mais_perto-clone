@@ -1,4 +1,3 @@
-// src/components/styles.ts
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -14,50 +13,64 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    marginBottom: 20,
   },
   title: {
     fontSize: 20,
     marginBottom: 10,
+    fontWeight: 'bold',
+    color: '#333',
   },
   input: {
     height: 40,
-    borderColor: '#000',
+    borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 8,
     paddingHorizontal: 10,
-    marginBottom: 10,
+    marginBottom: 15,
   },
   detailsInput: {
-    height: 80, // Aumenta a altura para o campo de detalhes
+    height: 80,
+    textAlignVertical: 'top',
   },
   map: {
     width: '100%',
-    height: 300, // Aumente a altura do mapa
-    marginBottom: 20, // Adicione um espaço abaixo do mapa
+    height: 350,
+    borderRadius: 10,
+    marginBottom: 20,
   },
   button: {
-    backgroundColor: '#00FF00',
+    backgroundColor: '#28a745',
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
-    marginTop: 20, // Aumente o espaço acima do botão
+    marginBottom: 15,
   },
   imageButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#00FF00', // Cor do botão
+    backgroundColor: '#007bff',
     padding: 10,
     borderRadius: 5,
-    marginBottom: 10,
+    marginBottom: 15,
   },
   buttonText: {
-    color: '#000000',
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   linkText: {
     color: '#FF7F50',
     textAlign: 'center',
     marginTop: 10,
+    fontSize: 14,
+  },
+  mapInstruction: {
+    fontSize: 14,
+    color: '#555',
+    marginBottom: 10, // Espaço entre a instrução e o mapa
+    textAlign: 'center', // Centraliza o texto
   },
 });
 

@@ -56,6 +56,9 @@ const Modal: React.FC<ModalProps> = ({ visible, onClose }) => {
             <TouchableOpacity onPress={() => handleNavigation('/')} style={styles.button}>
               <Text style={styles.buttonText}>Home</Text>
             </TouchableOpacity>
+            <TouchableOpacity onPress={() => handleNavigation('/AddProduct/addProduct')} style={styles.button}>
+              <Text style={styles.buttonText}>Adicionar imóvel</Text>
+            </TouchableOpacity>
             <TouchableOpacity onPress={() => handleNavigation('/Map/map')} style={styles.button}>
               <Text style={styles.buttonText}>Mapa</Text>
             </TouchableOpacity>

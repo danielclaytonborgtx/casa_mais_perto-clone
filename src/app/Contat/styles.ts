@@ -34,13 +34,13 @@ export const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
   button: {
-    backgroundColor: '#00FF00', // Cor do botão verde
-    padding: 15,
+    backgroundColor: '#28a745', // Cor do botão verde
+    padding: 10,
     borderRadius: 5,
     alignItems: 'center',
   },
   buttonText: {
-    color: '#000000',
+    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
   },
