@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, ScrollView, SafeAreaView, View } from 'react-native';
+import { StyleSheet, SafeAreaView, View } from 'react-native';
 import Header from '../Header/header';
 import Footer from '../Footer/footer';
 
@@ -8,15 +8,13 @@ interface AppLayoutProps {
 }
 
 const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
-  console.log('AppLayout renderizado'); // Log de depuração
+  console.log('AppLayout renderizado');
 
   return (
     <SafeAreaView style={styles.container}>
       <Header />
       <View style={styles.content}>
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
-          {children}
-        </ScrollView>
+        <View style={styles.scrollContainer}>{children}</View>
       </View>
       <Footer />
     </SafeAreaView>

@@ -3,60 +3,50 @@ import { View, TextInput, TouchableOpacity, Text, Alert, Image, ScrollView } fro
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as ImagePicker from 'expo-image-picker';
-import styles from './styles'; // Importa os estilos do arquivo styles.js
+import { useRouter } from 'expo-router'; // Importando useRouter
+import styles from './styles';
+import { useAuth } from '../../services/auth';
 
 const AddProduct = () => {
-  const [name, setName] = useState(''); // Estado para armazenar o título do imóvel
-  const [images, setImages] = useState<string[]>([]); // Estado para armazenar as imagens selecionadas
-  const [price, setPrice] = useState(''); // Estado para armazenar o preço do imóvel
-  const [details, setDetails] = useState(''); // Estado para armazenar os detalhes do imóvel
-  const [location, setLocation] = useState({ latitude: 0, longitude: 0 }); // Estado para armazenar a localização do imóvel
-  const [loading, setLoading] = useState(true); // Estado para controlar o carregamento da localização
+  const { user } = useAuth();
+  const router = useRouter(); // Inicializando o router
+  const [name, setName] = useState('');
+  const [images, setImages] = useState<string[]>([]);
+  const [price, setPrice] = useState('');
+  const [details, setDetails] = useState('');
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
+  const [loading, setLoading] = useState(true);
 
-  // useEffect para obter a localização atual do usuário
   useEffect(() => {
     const getCurrentLocation = async () => {
-      const { status } = await Location.requestForegroundPermissionsAsync(); // Solicita permissão para acessar a localização
+      const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         Alert.alert('Permissão de localização não concedida');
         return;
       }
 
-      const currentLocation = await Location.getCurrentPositionAsync({}); // Obtém a localização atual
-      const { latitude, longitude } = currentLocation.coords;
-      setLocation({ latitude, longitude }); // Atualiza o estado com a localização atual
-      setLoading(false); // Define o estado de carregamento como falso
+      const currentLocation = await Location.getCurrentPositionAsync({});
+      setLatitude(currentLocation.coords.latitude);
+      setLongitude(currentLocation.coords.longitude);
+      setLoading(false);
     };
 
-    getCurrentLocation(); // Chama a função para obter a localização
+    getCurrentLocation();
   }, []);
 
-  // Função para adicionar o imóvel
   const handleAddProduct = async () => {
-    // Valida se todos os campos estão preenchidos
     if (!name || images.length === 0 || !price || !details) {
       Alert.alert('Erro', 'Por favor, preencha todos os campos.');
       return;
     }
 
-    const parsedPrice = parseFloat(price); // Converte o preço para número
+    const parsedPrice = parseFloat(price);
     if (isNaN(parsedPrice) || parsedPrice <= 0) {
       Alert.alert('Erro', 'O preço deve ser um número válido e positivo.');
       return;
     }
 
-    // Converte imagens para formato base64
-    const base64Images = await Promise.all(images.map(async (img) => {
-      const response = await fetch(img);
-      const blob = await response.blob();
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.readAsDataURL(blob);
-      });
-    }));
-
-    // Tenta enviar os dados do imóvel para o servidor
     try {
       const response = await fetch('http://192.168.100.6:3000/imoveis', {
         method: 'POST',
@@ -66,63 +56,67 @@ const AddProduct = () => {
         body: JSON.stringify({
           titulo: name,
           descricao: details,
-          imagens: base64Images,
-          userId: 1, // ID do usuário logado (substitua conforme necessário)
-          location,
+          imagens: images, // Correção aqui
+          userId: user?.id,
+          latitude,
+          longitude,
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Falha ao adicionar imóvel');
+        const errorData = await response.json();
+        console.error('Error response:', errorData);
+        throw new Error(errorData.error || 'Falha ao adicionar imóvel');
       }
 
-      Alert.alert('Sucesso', 'Produto adicionado com sucesso!'); // Mensagem de sucesso
-      clearFields(); // Limpa os campos após o sucesso
+      const data = await response.json();
+      console.log(data);
+      Alert.alert('Sucesso', 'Produto adicionado com sucesso!');
+      clearFields();
+      router.push('/Profile/profile'); // Redireciona para a página de perfil após adicionar o imóvel
     } catch (error) {
-      console.error(error);
-      Alert.alert('Erro', 'Falha ao adicionar produto. Tente novamente.'); // Mensagem de erro
+      const errorMessage = (error as Error).message || 'Falha ao adicionar produto. Tente novamente.';
+      console.error('Error:', error);
+      Alert.alert('Erro', errorMessage);
     }
   };
 
-  // Função para limpar os campos do formulário
   const clearFields = () => {
-    setName(''); // Limpa o título
-    setImages([]); // Limpa as imagens
-    setPrice(''); // Limpa o preço
-    setDetails(''); // Limpa os detalhes
-    setLocation({ latitude: 0, longitude: 0 }); // Redefine a localização
+    setName('');
+    setImages([]);
+    setPrice('');
+    setDetails('');
+    setLatitude(0);
+    setLongitude(0);
   };
 
-  // Função para selecionar imagens da galeria
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: false,
       quality: 1,
-      selectionLimit: 5, // Limite de 5 imagens
+      selectionLimit: 5,
     });
 
     if (!result.canceled) {
-      const selectedImages = result.assets.map(asset => asset.uri); // Mapeia as imagens selecionadas
-      setImages(prevImages => [...prevImages, ...selectedImages]); // Atualiza o estado com as novas imagens
+      const selectedImages = result.assets.map(asset => asset.uri);
+      setImages(prevImages => [...prevImages, ...selectedImages]);
     }
   };
 
-  // Função para remover uma imagem selecionada
   const removeImage = (index: number) => {
-    setImages(prevImages => prevImages.filter((_, i) => i !== index)); // Filtra as imagens, removendo a selecionada
+    setImages(prevImages => prevImages.filter((_, i) => i !== index));
   };
 
   return (
     <ScrollView style={styles.container}>
-  
       <TextInput
         placeholder="Título"
         value={name}
         onChangeText={setName}
         style={styles.input}
       />
-  
+
       <TextInput
         placeholder="Preço"
         value={price}
@@ -130,23 +124,20 @@ const AddProduct = () => {
         keyboardType="numeric"
         style={styles.input}
       />
-  
+
       <TextInput
         placeholder="Detalhes"
         value={details}
         onChangeText={setDetails}
         style={styles.input}
       />
-  
+
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom: 10 }}>
         {images.map((img, index) => (
           <View key={index} style={{ position: 'relative', marginRight: 10, marginBottom: 10 }}>
-            <Image
-              source={{ uri: img }}
-              style={{ width: 100, height: 100 }}
-            />
+            <Image source={{ uri: img }} style={{ width: 100, height: 100 }} />
             <TouchableOpacity
-              onPress={() => removeImage(index)} // Chama a função para remover a imagem
+              onPress={() => removeImage(index)}
               style={{
                 position: 'absolute',
                 top: 0,
@@ -168,43 +159,38 @@ const AddProduct = () => {
       <Text style={styles.mapInstruction}>
         Ajuste a localização exata do seu imóvel arrastando o marcador no mapa.
       </Text>
-  
+
       {!loading ? (
         <MapView
           style={styles.map}
           initialRegion={{
-            latitude: location.latitude,
-            longitude: location.longitude,
+            latitude,
+            longitude,
             latitudeDelta: 0.007,
             longitudeDelta: 0.007,
           }}
           loadingEnabled
           showsUserLocation={true}
           onRegionChangeComplete={(region) => {
-            setLocation({
-              latitude: region.latitude,
-              longitude: region.longitude,
-            });
+            setLatitude(region.latitude);
+            setLongitude(region.longitude);
           }}
         >
-  
           <Marker
-            coordinate={location}
+            coordinate={{ latitude, longitude }}
             title={name}
             draggable
             onDragEnd={(e) => {
-              const newCoordinate = e.nativeEvent.coordinate; // Obtém a nova coordenada após arrastar
-              setLocation({
-                latitude: newCoordinate.latitude,
-                longitude: newCoordinate.longitude,
-              });
+              const newCoordinate = e.nativeEvent.coordinate;
+              setLatitude(newCoordinate.latitude);
+              setLongitude(newCoordinate.longitude);
             }}
           />
         </MapView>
       ) : (
-        <Text>Carregando mapa...</Text> // Mensagem de carregamento do mapa
+        <Text>Carregando mapa...</Text>
       )}
-  
+
       <TouchableOpacity onPress={handleAddProduct} style={styles.button}>
         <Text style={styles.buttonText}>Adicionar Imóvel</Text>
       </TouchableOpacity>

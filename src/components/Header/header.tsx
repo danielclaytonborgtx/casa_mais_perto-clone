@@ -4,17 +4,25 @@ import { Ionicons } from '@expo/vector-icons';
 import Modal from '../Modal/modal';
 import { useRouter } from 'expo-router';
 import { styles } from './styles';
+import { useAuth } from '../../services/auth'; // Importando o contexto de autenticação
 
 const Header: React.FC = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const router = useRouter();
+  const { user } = useAuth(); // Obtendo informações do usuário logado
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
 
   const handleAddProduct = () => {
-    router.push('/AddProduct/addProduct');
+    if (user) {
+      // Se o usuário estiver logado, redireciona para a página de adicionar produto
+      router.push('/AddProduct/addProduct');
+    } else {
+      // Se não estiver logado, redireciona para a página de login
+      router.push('/Login/login');
+    }
     console.log('Adicionar produto');
   };
 
@@ -29,7 +37,7 @@ const Header: React.FC = () => {
         placeholderTextColor="black"
       />
       <TouchableOpacity style={styles.addButton} onPress={handleAddProduct}>
-        <Ionicons name="add" size={40} color="black" style={{ transform: [{ scale: 1.3 }] }}/>
+        <Ionicons name="add" size={40} color="black" style={{ transform: [{ scale: 1.3 }] }} />
       </TouchableOpacity>
       <Modal visible={isModalVisible} onClose={toggleModal} />
     </View>

@@ -28,14 +28,14 @@ export const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 10,
   },
-  googleButton: {
-    backgroundColor: '#db4437',
-  },
   buttonText: {
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
     textAlign: 'center',
+  },
+  googleButton: {
+    backgroundColor: '#db4437',
   },
   orText: {
     textAlign: 'center',
@@ -46,11 +46,5 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#007bff',
     marginTop: 15,
-  },
-  loggedInUserText: {
-    textAlign: 'center',
-    marginTop: 20,
-    fontSize: 16,
-    color: '#333', // ou a cor que você preferir
   },
 });

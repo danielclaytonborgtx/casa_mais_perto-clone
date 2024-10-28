@@ -1,8 +1,10 @@
+// src/components/Modal/modal.tsx
 import React, { useEffect, useRef, useState } from 'react';
 import { Modal as RNModal, View, Text, TouchableOpacity, Animated } from 'react-native';
 import { styles } from './styles';
 import { User as IconUser } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
+import { useAuth } from '../../services/auth'; // Importe o contexto de autenticação
 
 interface ModalProps {
   visible: boolean;
@@ -13,10 +15,10 @@ const Modal: React.FC<ModalProps> = ({ visible, onClose }) => {
   const slideAnim = useRef(new Animated.Value(-300)).current; 
   const [showModal, setShowModal] = useState(visible);
   const router = useRouter();
+  const { isAuthenticated } = useAuth(); // Verifique se o usuário está autenticado
 
   useEffect(() => {
     if (visible) {
-      
       setShowModal(true);
       Animated.timing(slideAnim, {
         toValue: 0, 
@@ -24,7 +26,6 @@ const Modal: React.FC<ModalProps> = ({ visible, onClose }) => {
         useNativeDriver: true,
       }).start();
     } else {
-      
       Animated.timing(slideAnim, {
         toValue: -300, 
         duration: 300,
@@ -38,6 +39,14 @@ const Modal: React.FC<ModalProps> = ({ visible, onClose }) => {
   const handleNavigation = (route: string) => {
     router.push(route as any); 
     onClose(); 
+  };
+
+  const handleAddProperty = () => {
+    if (isAuthenticated) {
+      handleNavigation('/AddProduct/addProduct'); // Direciona para a página de adicionar imóvel
+    } else {
+      handleNavigation('/Login/login'); // Direciona para a página de login
+    }
   };
 
   return (
@@ -56,7 +65,7 @@ const Modal: React.FC<ModalProps> = ({ visible, onClose }) => {
             <TouchableOpacity onPress={() => handleNavigation('/')} style={styles.button}>
               <Text style={styles.buttonText}>Home</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleNavigation('/AddProduct/addProduct')} style={styles.button}>
+            <TouchableOpacity onPress={handleAddProperty} style={styles.button}>
               <Text style={styles.buttonText}>Adicionar imóvel</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => handleNavigation('/Map/map')} style={styles.button}>
@@ -68,8 +77,7 @@ const Modal: React.FC<ModalProps> = ({ visible, onClose }) => {
             <TouchableOpacity onPress={() => handleNavigation('/AboutUs/aboutUs')} style={styles.button}>
               <Text style={styles.buttonText}>Sobre nós</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleNavigation('/Contat/contat')} style={styles.button}>
-              <Text style={styles.buttonText}>Contato</Text>
+            <TouchableOpacity onPress={() => handleNavigation('/Contact/contact')} style={styles.button}> 
             </TouchableOpacity>
           </View>
         </Animated.View>
