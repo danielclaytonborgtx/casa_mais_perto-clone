@@ -5,24 +5,25 @@ import * as Google from 'expo-auth-session/providers/google';
 import Constants from 'expo-constants';
 import axios from 'axios';
 import { styles } from './styles';
+import { useAuth } from '../../services/auth'; // Importa o contexto de autenticação
 
-// Defina uma interface para a resposta esperada da API
+// Define uma interface para a resposta esperada da API
 interface LoginResponse {
   user: {
-    username: string; // ou qualquer outro campo que você esteja esperando
-    // adicione outros campos conforme necessário
+    id: number; // Adiciona o ID do usuário
+    username: string;
+    email: string; // Adicione outros campos conforme necessário
   };
-  // adicione outros campos que a resposta pode ter
 }
 
 const Login = () => {
   const router = useRouter();
+  const { login } = useAuth(); // Obtém a função login do contexto de autenticação
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [clientId, setClientId] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false); // Estado de carregamento
-  const [loggedInUser, setLoggedInUser] = useState<string | null>(null); // Armazena o nome do usuário logado
-
+  const [loading, setLoading] = useState(false);
+  
   useEffect(() => {
     const androidClientId = Constants.expoConfig?.extra?.ANDROID_CLIENT_ID;
     const webClientId = Constants.expoConfig?.extra?.WEB_CLIENT_ID;
@@ -35,21 +36,27 @@ const Login = () => {
       return;
     }
 
-    setLoading(true); // Ativa o estado de carregamento
+    setLoading(true);
 
     try {
       const response = await axios.post<LoginResponse>('http://192.168.100.6:3000/login', { username: email, password });
       if (response.status === 200) {
-        setLoggedInUser(response.data.user.username); // Armazena o nome do usuário
+        const user = {
+          id: response.data.user.id, // Armazena o ID do usuário
+          username: response.data.user.username,
+          email: response.data.user.email // Armazena o email do usuário
+        };
+        await login(user); // Chama a função login do AuthContext
         Alert.alert('Sucesso', 'Login realizado com sucesso!');
-        router.push('/Profile/profile'); // Direcionar para a página de perfil
+        setEmail(''); // Limpa o campo de email
+        setPassword(''); // Limpa o campo de senha
+        router.push('/Profile/profile'); // Redireciona para a página do perfil
       }
     } catch (error) {
-      console.error(error);
       const errorMessage = (error as any).response?.data?.error || 'Credenciais incorretas. Tente novamente.';
       Alert.alert('Erro', errorMessage);
     } finally {
-      setLoading(false); // Desativa o estado de carregamento
+      setLoading(false);
     }
   };
 
@@ -63,12 +70,16 @@ const Login = () => {
       const { id_token } = response.params;
       axios.post<LoginResponse>('http://192.168.100.6:3000/auth/google', { id_token })
         .then(res => {
-          setLoggedInUser(res.data.user.username); // Armazena o nome do usuário
+          const user = {
+            id: res.data.user.id, // Armazena o ID do usuário
+            username: res.data.user.username,
+            email: res.data.user.email // Armazena o email do usuário
+          };
+          login(user); // Chama a função login do AuthContext
           Alert.alert('Sucesso', 'Login realizado com Google!');
-          router.push('/Profile/profile'); // Direcionar para a página de perfil
+          router.push('/Profile/profile'); // Redireciona para a página do perfil
         })
         .catch(err => {
-          console.error(err);
           Alert.alert('Erro', 'Falha na autenticação com Google.');
         });
     } else if (response?.type === 'error') {
@@ -98,7 +109,7 @@ const Login = () => {
 
       <TouchableOpacity onPress={handleLogin} style={styles.button} disabled={loading}>
         {loading ? (
-          <ActivityIndicator color="#fff" /> // Indicador de carregamento
+          <ActivityIndicator color="#fff" />
         ) : (
           <Text style={styles.buttonText}>Entrar</Text>
         )}
@@ -110,7 +121,7 @@ const Login = () => {
         <TouchableOpacity
           onPress={() => promptAsync()}
           style={[styles.button, styles.googleButton]}
-          disabled={!request || loading} // Desabilitar se em carregamento
+          disabled={!request || loading}
         >
           <Text style={styles.buttonText}>Continuar com Google</Text>
         </TouchableOpacity>
@@ -119,13 +130,6 @@ const Login = () => {
       <TouchableOpacity onPress={() => router.push('/Signup/signup')}>
         <Text style={styles.toggleText}>Não tem conta? Criar uma</Text>
       </TouchableOpacity>
-
-      {/* Mostra o nome do usuário logado se estiver disponível */}
-      {loggedInUser && (
-        <Text style={styles.loggedInUserText}>
-          Olá, {loggedInUser}! Clique para ir ao seu perfil.
-        </Text>
-      )}
     </View>
   );
 };

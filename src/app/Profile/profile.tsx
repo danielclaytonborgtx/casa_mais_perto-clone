@@ -1,25 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, ActivityIndicator, StyleSheet, Image } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { useAuth } from '../../services/auth';
 import { Imovel } from '../../@types';
+import { useRouter } from 'expo-router';
+import { styles } from './styles';
 
 const Profile = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [imoveis, setImoveis] = useState<Imovel[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchImoveis = async () => {
-      if (user) {
+      if (user && user.id) {
         try {
           const response = await fetch(`http://192.168.100.6:3000/imoveis/user?userId=${user.id}`);
           if (!response.ok) {
             throw new Error('Falha ao buscar imóveis');
           }
           const data = await response.json();
+          console.log(data); // Log dos dados retornados para depuração
           setImoveis(data);
         } catch (error) {
-          console.error(error);
+          console.error("Erro ao buscar imóveis:", error);
+          setError('Erro ao buscar imóveis. Tente novamente mais tarde.');
         } finally {
           setLoading(false);
         }
@@ -29,7 +35,12 @@ const Profile = () => {
     };
 
     fetchImoveis();
-  }, [user]);
+  }, [user?.id]);
+
+  const handleLogout = async () => {
+    await logout();
+    router.replace('/'); 
+  };
 
   if (loading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
@@ -38,74 +49,45 @@ const Profile = () => {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        {user && user.username ? ( // Verifique se user e user.username existem
-          <Text style={styles.title}>{user.username}</Text>
+        <View style={styles.header}>
+          <Text style={styles.title}>
+            {user?.username || 'Usuário não logado'}
+          </Text>
+          <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+            <Text style={styles.logoutButtonText}>Sair</Text>
+          </TouchableOpacity>
+        </View>
+
+        {error ? (
+          <Text style={styles.errorText}>{error}</Text>
+        ) : imoveis.length === 0 ? (
+          <Text style={styles.noImoveisText}>Nenhum imóvel encontrado.</Text>
         ) : (
-          <Text style={styles.title}>Usuário não logado</Text>
-        )}
-        <FlatList
-          data={imoveis}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <View style={styles.propertyCard}>
-              <Text style={styles.propertyTitle}>{item.titulo}</Text>
-              <Text>{item.descricao}</Text>
-              <Text>Latitude: {item.latitude}</Text>
-              <Text>Longitude: {item.longitude}</Text>
-              <View style={styles.imagesContainer}>
-                {item.imagens.map((img, index) => (
-                  <Image key={index} source={{ uri: img.url }} style={styles.image} />
-                ))}
+          <FlatList
+            data={imoveis}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <View style={styles.propertyCard}>
+                <View style={styles.propertyDetails}>
+                  <Text style={styles.propertyTitle}>{item.titulo}</Text>
+                  <Text style={styles.propertyValue}>
+                    Valor: R$ {item.valor !== null && item.valor !== undefined ? item.valor.toFixed(2).replace('.', ',') : 'N/A'}
+                  </Text>
+                  <Text>{item.descricao}</Text>
+                </View>
+                <View style={styles.imagesContainer}>
+                  {item.imagens.length > 0 && (
+                    <Image source={{ uri: item.imagens[0].url }} style={styles.image} />
+                  )}
+                </View>
               </View>
-            </View>
-          )}
-          contentContainerStyle={styles.listContent}
-        />
+            )}
+            contentContainerStyle={styles.listContent}
+          />
+        )}
       </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  content: {
-    flex: 1,
-    padding: 16,
-    marginTop: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
-    textAlign: 'center',
-  },
-  propertyCard: {
-    padding: 10,
-    marginBottom: 10,
-    backgroundColor: '#f9f9f9',
-    borderRadius: 8,
-    elevation: 1,
-  },
-  propertyTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  imagesContainer: {
-    flexDirection: 'row',
-    marginTop: 5,
-  },
-  image: {
-    width: 100,
-    height: 100,
-    marginRight: 5,
-    borderRadius: 5,
-  },
-  listContent: {
-    paddingBottom: 20,
-  },
-});
 
 export default Profile;

@@ -1,4 +1,3 @@
-// src/components/Modal/modal.tsx
 import React, { useEffect, useRef, useState } from 'react';
 import { Modal as RNModal, View, Text, TouchableOpacity, Animated } from 'react-native';
 import { styles } from './styles';
@@ -15,7 +14,7 @@ const Modal: React.FC<ModalProps> = ({ visible, onClose }) => {
   const slideAnim = useRef(new Animated.Value(-300)).current; 
   const [showModal, setShowModal] = useState(visible);
   const router = useRouter();
-  const { isAuthenticated } = useAuth(); // Verifique se o usuário está autenticado
+  const { user, isAuthenticated } = useAuth(); // Obtenha o usuário e a autenticação
 
   useEffect(() => {
     if (visible) {
@@ -58,10 +57,16 @@ const Modal: React.FC<ModalProps> = ({ visible, onClose }) => {
       <TouchableOpacity style={styles.container} onPress={onClose}>
         <Animated.View style={[styles.modalContent, { transform: [{ translateX: slideAnim }] }]}>
           <View style={styles.sidebar}>
-            <TouchableOpacity onPress={() => handleNavigation('/Login/login')} style={styles.button}>
-              <IconUser size={24} color="black" />
-              <Text style={styles.buttonText}>Login</Text>
-            </TouchableOpacity>
+            {isAuthenticated && user ? ( // Verifica se user não é null
+              <TouchableOpacity onPress={() => handleNavigation('/Profile/profile')} style={styles.buttonText}>
+                <Text style={styles.buttonText}>{user.username}</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={() => handleNavigation('/Login/login')} style={styles.button}>
+                <IconUser size={24} color="black" />
+                <Text style={styles.buttonText}>Login</Text>
+              </TouchableOpacity>
+            )}
             <TouchableOpacity onPress={() => handleNavigation('/')} style={styles.button}>
               <Text style={styles.buttonText}>Home</Text>
             </TouchableOpacity>
@@ -77,7 +82,8 @@ const Modal: React.FC<ModalProps> = ({ visible, onClose }) => {
             <TouchableOpacity onPress={() => handleNavigation('/AboutUs/aboutUs')} style={styles.button}>
               <Text style={styles.buttonText}>Sobre nós</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleNavigation('/Contact/contact')} style={styles.button}> 
+            <TouchableOpacity onPress={() => handleNavigation('/Contat/contat')} style={styles.button}> 
+              <Text style={styles.buttonText}>Contato</Text>
             </TouchableOpacity>
           </View>
         </Animated.View>
