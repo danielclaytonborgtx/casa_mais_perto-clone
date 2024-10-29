@@ -1,12 +1,11 @@
-// src/services/auth.tsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface User {
-  id: number; // ou string, conforme necessário
-  username: string; // Adicione esta linha
+  id: number;
+  username: string;
   email: string;
-  // Outros campos, se necessário
+  // Você pode adicionar mais propriedades aqui conforme necessário
 }
 
 interface AuthContextType {
@@ -22,24 +21,40 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    // Recupera o usuário armazenado ao inicializar o aplicativo
     const loadUser = async () => {
-      const storedUser = await AsyncStorage.getItem('user');
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
+      try {
+        const storedUser = await AsyncStorage.getItem('user');
+        if (storedUser) {
+          const parsedUser = JSON.parse(storedUser);
+          setUser(parsedUser);
+        }
+      } catch (error) {
+        console.error("Erro ao carregar o usuário do AsyncStorage:", error);
       }
     };
     loadUser();
   }, []);
 
   const login = async (user: User) => {
-    setUser(user);
-    await AsyncStorage.setItem('user', JSON.stringify(user)); // Armazena o usuário
+    try {
+      console.log("Usuário fazendo login:", user);
+      setUser(user);
+      await AsyncStorage.setItem('user', JSON.stringify(user));
+      console.log("Usuário salvo no AsyncStorage:", JSON.stringify(user));
+    } catch (error) {
+      console.error("Erro ao fazer login:", error);
+    }
   };
 
   const logout = async () => {
-    setUser(null);
-    await AsyncStorage.removeItem('user'); // Remove o usuário armazenado
+    try {
+      console.log("Fazendo logout");
+      setUser(null);
+      await AsyncStorage.removeItem('user');
+      console.log("Usuário removido do AsyncStorage");
+    } catch (error) {
+      console.error("Erro ao fazer logout:", error);
+    }
   };
 
   return (
