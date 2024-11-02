@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
@@ -18,12 +18,53 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
-    elevation: 5, // Adiciona sombra no Android
+    elevation: 5,
   },
   marker: {
-    width: 15, // Largura do marcador
-    height: 15, // Altura do marcador
-    borderRadius: 50, // Forma redonda
-    backgroundColor: 'blue', // Cor do marcador
+    width: 20,
+    height: 20,
+    borderRadius: 50,
+    backgroundColor: 'blue',
+  },
+  infoWindow: {
+    position: 'absolute',
+    bottom: 50,
+    left: '50%',
+    transform: [{ translateX: -100 }],
+    width: 200,
+    padding: 10,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 5,
+    right: 5,
+    padding: 5,
+    backgroundColor: 'red',
+    borderRadius: 12,
+    zIndex: 1,
+  },
+  closeButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 12,
+  },
+  image: {
+    width: 180,
+    height: 100,
+    borderRadius: 10,
+  },
+  title: {
+    marginTop: 5,
+    fontWeight: 'bold',
+    fontSize: 16,
+    textAlign: 'center',
   },
 });

@@ -1,17 +1,19 @@
-// src/mapScreen.tsx
 import React, { useEffect, useRef, useState } from 'react';
-import { View, TouchableOpacity, Animated } from 'react-native';
+import { View, TouchableOpacity, Animated, Image, Text } from 'react-native';
 import MapView, { Marker, Region } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { styles } from './styles';
-import { Imovel } from '../../@types'; // Certifique-se de que o caminho está correto
+import { Imovel } from '../../@types';
+import { useRouter } from 'expo-router';
 
 const MapScreen: React.FC = () => {
   const [location, setLocation] = useState<Location.LocationObject | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [imoveis, setImoveis] = useState<Imovel[]>([]); // Estado para armazenar os imóveis
-  const mapRef = useRef<MapView>(null); // Referência para o MapView
+  const [imoveis, setImoveis] = useState<Imovel[]>([]);
+  const mapRef = useRef<MapView>(null);
+  const [selectedImovel, setSelectedImovel] = useState<Imovel | null>(null);
+  const router = useRouter();
   const [animatedRegion] = useState(new Animated.Value(0)); // Estado animado
 
   useEffect(() => {
@@ -25,8 +27,8 @@ const MapScreen: React.FC = () => {
       const subscription = await Location.watchPositionAsync(
         {
           accuracy: Location.Accuracy.High,
-          timeInterval: 10000, // Atualiza a cada 10 segundos
-          distanceInterval: 1, // Atualiza a cada 1 metro
+          timeInterval: 10000,
+          distanceInterval: 1,
         },
         (newLocation) => {
           setLocation(newLocation);
@@ -34,13 +36,13 @@ const MapScreen: React.FC = () => {
       );
 
       return () => {
-        subscription.remove(); // Remove a assinatura quando o componente é desmontado
+        subscription.remove();
       };
     };
 
     const fetchImoveis = async () => {
       try {
-        const response = await fetch('http://192.168.100.6:3000/imoveis'); // URL para buscar todos os imóveis
+        const response = await fetch('http://192.168.100.6:3000/imoveis');
         if (!response.ok) {
           throw new Error('Falha ao buscar imóveis');
         }
@@ -52,8 +54,20 @@ const MapScreen: React.FC = () => {
     };
 
     watchLocation();
-    fetchImoveis(); // Chama a função para buscar imóveis
+    fetchImoveis();
   }, []);
+
+  const handleMarkerPress = (imovel: Imovel) => {
+    setSelectedImovel(imovel);
+  };
+
+  const handleCloseInfoWindow = () => {
+    setSelectedImovel(null);
+  };
+
+  const handleImagePress = (imovelId: number) => {
+    router.push(`/ProductDetail/${imovelId}`);
+  };
 
   const handleUpdateLocation = async () => {
     let newLocation = await Location.getCurrentPositionAsync({});
@@ -80,6 +94,7 @@ const MapScreen: React.FC = () => {
     }
   };
 
+
   return (
     <View style={styles.container}>
       <MapView
@@ -92,16 +107,17 @@ const MapScreen: React.FC = () => {
           longitudeDelta: 0.0421,
         }}
         showsUserLocation
-        showsMyLocationButton={false} // Remove o botão de localização padrão
-        showsCompass={false} // Remove a bússola
+        showsMyLocationButton={false}
+        showsCompass={false}
       >
         {imoveis.map((imovel) => (
           <Marker
-            key={imovel.id} // Certifique-se de que o ID é único
+            key={imovel.id}
             coordinate={{
-              latitude: imovel.latitude, // Substitua com a propriedade correta do imóvel
-              longitude: imovel.longitude, // Substitua com a propriedade correta do imóvel
+              latitude: imovel.latitude,
+              longitude: imovel.longitude,
             }}
+            onPress={() => handleMarkerPress(imovel)}
           >
             <View style={styles.marker} />
           </Marker>
@@ -110,6 +126,21 @@ const MapScreen: React.FC = () => {
       <TouchableOpacity style={styles.updateButton} onPress={handleUpdateLocation}>
         <MaterialCommunityIcons name="crosshairs-gps" size={20} />
       </TouchableOpacity>
+      
+      {selectedImovel && (
+        <View style={styles.infoWindow}>
+          <TouchableOpacity style={styles.closeButton} onPress={handleCloseInfoWindow}>
+            <Text style={styles.closeButtonText}>X</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleImagePress(selectedImovel.id)}>
+            <Image
+              source={{ uri: selectedImovel.imagens[0]?.url }}
+              style={styles.image}
+            />
+          </TouchableOpacity>
+          <Text style={styles.title}>{selectedImovel.titulo}</Text>
+        </View>
+      )}
     </View>
   );
 };

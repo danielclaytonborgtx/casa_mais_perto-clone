@@ -36,7 +36,6 @@ const ListScreen: React.FC = () => {
   }
 
   const handlePress = (imovelId: number) => {
-    // Navegar para a tela de detalhes do imóvel, passando o ID como parâmetro
     router.push(`/ProductDetail/${imovelId}`);
   };
 
@@ -57,7 +56,6 @@ const ListScreen: React.FC = () => {
                   <Text style={styles.propertyValue}>
                     Valor: R$ {item.valor !== null && item.valor !== undefined ? item.valor.toFixed(2).replace('.', ',') : 'N/A'}
                   </Text>
-                  <Text>{item.descricao}</Text>
                 </View>
                 <Image source={{ uri: item.imagens[0]?.url }} style={styles.image} />
               </View>

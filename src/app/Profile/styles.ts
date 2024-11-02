@@ -1,3 +1,4 @@
+// styles.ts
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
@@ -41,7 +42,7 @@ export const styles = StyleSheet.create({
     color: '#888',
   },
   propertyCard: {
-    flexDirection: 'row', // Disposição em linha
+    flexDirection: 'row',
     padding: 10,
     marginBottom: 10,
     backgroundColor: '#f9f9f9',
@@ -49,8 +50,8 @@ export const styles = StyleSheet.create({
     elevation: 1,
   },
   propertyDetails: {
-    flex: 1, // Permite que os detalhes ocupem o espaço disponível
-    paddingRight: 10, // Espaçamento entre os detalhes e a imagem
+    flex: 1,
+    paddingRight: 10,
   },
   propertyTitle: {
     fontSize: 18,
@@ -66,11 +67,23 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   image: {
-    width: 150, // Tamanho da imagem
+    width: 150,
     height: 150,
     borderRadius: 5,
   },
   listContent: {
     paddingBottom: 20,
+  },
+  iconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    marginTop: 8,
+  },
+  editIcon: {
+    marginRight: 8,
+  },
+  deleteIcon: {
+    marginRight: 0,
   },
 });

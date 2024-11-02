@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Text, ActivityIndicator, StyleSheet, ScrollView, Image, View, Button } from 'react-native';
+import { Text, ActivityIndicator, ScrollView, Image, View, Button, Modal, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
+import Swiper from 'react-native-swiper';
+import { styles } from './styles';
 
 interface ImageData {
   url: string;
@@ -14,11 +16,13 @@ interface Product {
 }
 
 const ProductDetail: React.FC = () => {
-  const { id: productId } = useLocalSearchParams<{ id: string }>(); // Mude 'productId' para 'id'
-  console.log('Product ID:', productId); // Verifique se está retornando o ID esperado
+  const { id: productId } = useLocalSearchParams<{ id: string }>();
+  console.log('Product ID:', productId);
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   const fetchProduct = async () => {
     try {
@@ -40,6 +44,11 @@ const ProductDetail: React.FC = () => {
     fetchProduct();
   }, [productId]);
 
+  const openImageModal = (index: number) => {
+    setSelectedImageIndex(index);
+    setModalVisible(true);
+  };
+
   if (loading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
@@ -55,61 +64,39 @@ const ProductDetail: React.FC = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>{product?.titulo}</Text>
-      <Text style={styles.value}>
-        Valor: R$ {product?.valor ? product.valor.toFixed(2).replace('.', ',') : 'N/A'}
-      </Text>
-      <Text style={styles.description}>{product?.descricao}</Text>
-      
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {product?.imagens.length ? (
           product.imagens.map((img: ImageData, index: number) => (
-            <Image key={index} source={{ uri: img.url }} style={styles.image} />
+            <TouchableOpacity key={index} onPress={() => openImageModal(index)}>
+              <Image source={{ uri: img.url }} style={styles.image} />
+            </TouchableOpacity>
           ))
         ) : (
           <Text style={styles.noImages}>Nenhuma imagem disponível</Text>
         )}
       </ScrollView>
+      <Text style={styles.title}>{product?.titulo}</Text>
+      <Text style={styles.value}>
+        Valor: R$ {product?.valor ? product.valor.toFixed(2).replace('.', ',') : 'N/A'}
+      </Text>
+      <Text style={styles.description}>{product?.descricao}</Text>
+
+      {/* Modal for Image Viewer */}
+      <Modal visible={modalVisible} animationType="slide" onRequestClose={() => setModalVisible(false)}>
+        <Swiper 
+          index={selectedImageIndex} 
+          loop={false} 
+          showsPagination={true}
+        >
+          {product?.imagens.map((img: ImageData, index: number) => (
+            <View key={index} style={styles.modalImageContainer}>
+              <Image source={{ uri: img.url }} style={styles.modalImage} />
+            </View>
+          ))}
+        </Swiper>
+      </Modal>
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  value: {
-    fontSize: 20,
-    marginBottom: 10,
-  },
-  description: {
-    fontSize: 16,
-    marginBottom: 20,
-  },
-  image: {
-    width: 300,
-    height: 200,
-    borderRadius: 8,
-    marginRight: 10,
-  },
-  errorContainer: {
-    padding: 20,
-    alignItems: 'center',
-  },
-  errorText: {
-    color: 'red',
-    textAlign: 'center',
-  },
-  noImages: {
-    textAlign: 'center',
-    marginTop: 20,
-  },
-});
 
 export default ProductDetail;

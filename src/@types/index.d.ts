@@ -13,4 +13,6 @@ export interface User {
     longitude: number;
     imagens: { url: string }[]; 
   }
+
+  
   

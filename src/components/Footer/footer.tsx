@@ -32,7 +32,7 @@ const Footer: React.FC = () => {
         activeOpacity={0.8}
       >
         <View style={styles.buttonContent}>
-          <Ionicons name="list" size={32} color="black" />
+          <Ionicons name="list" size={40} color="black" />
           <Text style={styles.buttonText}>Lista</Text>
         </View>
       </TouchableOpacity>
