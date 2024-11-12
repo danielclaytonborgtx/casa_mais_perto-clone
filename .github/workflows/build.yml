@@ -3,7 +3,7 @@ name: Build Android with Expo
 on:
   push:
     branches:
-      - master  # Aciona o workflow quando houver push no branch 'main'
+      - master  # Aciona o workflow quando houver push no branch 'master'
 
 jobs:
   build:
@@ -39,7 +39,7 @@ jobs:
 
       # Passo 7: Upload do APK como artefato (para download)
       - name: Upload APK
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3  # Aqui foi atualizado para v3
         with:
           name: android-apk
           path: ./build/*.apk  # Ajuste o caminho conforme o local onde o APK é gerado.
