@@ -3,46 +3,45 @@ name: Build Android with Expo
 on:
   push:
     branches:
-      - master  # Aciona o workflow quando houver push no branch 'master'
+      - master  # Dispara o workflow quando houver push no branch 'master'
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # O workflow irá rodar em um ambiente Ubuntu.
+    runs-on: ubuntu-latest
 
     steps:
-      # Passo 1: Checkout do código
+      # Checkout do código
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3  # Atualizado para v3
 
-      # Passo 2: Configurar o Node.js
+      # Configurar Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'  # Defina a versão do Node.js que você usa no seu projeto.
+          node-version: '16'
 
-      # Passo 3: Instalar dependências
+      # Instalar dependências
       - name: Install dependencies
-        run: |
-          npm install  # Ou `yarn install`, caso use o Yarn.
+        run: npm install  # Ou `yarn install` se usar Yarn
 
-      # Passo 4: Instalar o EAS CLI (caso use Expo para build)
+      # Instalar o EAS CLI
       - name: Install EAS CLI
         run: npm install -g eas-cli
 
-      # Passo 5: Login no Expo com token EAS
+      # Login no Expo usando o token EAS
       - name: EAS login
         env:
           EAS_TOKEN: ${{ secrets.EAS_TOKEN }}
         run: |
           eas whoami || eas login --token $EAS_TOKEN
 
-      # Passo 6: Criar o APK Android com o Expo EAS
+      # Criar o APK Android com o Expo EAS
       - name: Build Android APK
         run: eas build --platform android --non-interactive
 
-      # Passo 7: Upload do APK como artefato (para download)
+      # Upload do APK como artefato (para download)
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
           name: android-apk
-          path: ./build/*.apk  # Ajuste o caminho conforme o local onde o APK é gerado.
+          path: "**/*.apk"  # Verifica todos os diretórios para localizar o APK
