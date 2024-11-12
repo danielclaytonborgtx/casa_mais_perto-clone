@@ -12,11 +12,11 @@ jobs:
     steps:
       # Passo 1: Checkout do código
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Passo 2: Configurar o Node.js
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '16'  # Defina a versão do Node.js que você usa no seu projeto.
 
@@ -29,9 +29,12 @@ jobs:
       - name: Install EAS CLI
         run: npm install -g eas-cli
 
-      # Passo 5: Login no Expo (se necessário)
+      # Passo 5: Login no Expo com token EAS
       - name: EAS login
-        run: eas login --token ${{ secrets.EAS_TOKEN }}  
+        env:
+          EAS_TOKEN: ${{ secrets.EAS_TOKEN }}
+        run: |
+          eas whoami || eas login --token $EAS_TOKEN
 
       # Passo 6: Criar o APK Android com o Expo EAS
       - name: Build Android APK
@@ -39,7 +42,7 @@ jobs:
 
       # Passo 7: Upload do APK como artefato (para download)
       - name: Upload APK
-        uses: actions/upload-artifact@v3  # Aqui foi atualizado para v3
+        uses: actions/upload-artifact@v3
         with:
           name: android-apk
           path: ./build/*.apk  # Ajuste o caminho conforme o local onde o APK é gerado.
