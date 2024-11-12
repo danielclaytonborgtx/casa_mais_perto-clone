@@ -1,9 +1,8 @@
 {
-  "name": "casamaispertoclone",
+  "name": "casamaisperto",
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "build": "expo export",
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android",
