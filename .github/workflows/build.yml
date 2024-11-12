@@ -18,22 +18,22 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '16'  # Defina a versão do Node.js que você usa no seu projeto.
 
       # Passo 3: Instalar dependências
       - name: Install dependencies
-        run: npm install  # Ou `yarn install` se usar Yarn
+        run: npm install  # Ou `yarn install`, caso use o Yarn.
 
-      # Passo 4: Instalar o EAS CLI
+      # Passo 4: Instalar o EAS CLI (caso use Expo para build)
       - name: Install EAS CLI
         run: npm install -g eas-cli
 
       # Passo 5: Login no Expo com token EAS
-      - name: EAS login
+      - name: Authenticate with Expo
         env:
-          EAS_TOKEN: ${{ secrets.EAS_TOKEN }}
+          EXPO_TOKEN: ${{ secrets.EAS_TOKEN }}
         run: |
-          eas whoami || eas login --token $EAS_TOKEN
+          eas whoami || echo "Logged in with token"
 
       # Passo 6: Criar o APK Android com o Expo EAS
       - name: Build Android APK
