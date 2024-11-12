@@ -39,7 +39,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post<LoginResponse>('http://192.168.100.6:3000/login', { username: email, password });
+      const response = await axios.post<LoginResponse>('https://casa-mais-perto-server-clone-production.up.railway.app/login', { username: email, password });
       if (response.status === 200) {
         const user = {
           id: response.data.user.id, // Armazena o ID do usuário
@@ -68,7 +68,7 @@ const Login = () => {
   useEffect(() => {
     if (response?.type === 'success') {
       const { id_token } = response.params;
-      axios.post<LoginResponse>('http://192.168.100.6:3000/auth/google', { id_token })
+      axios.post<LoginResponse>('https://casa-mais-perto-server-clone-production.up.railway.app/auth/google', { id_token })
         .then(res => {
           const user = {
             id: res.data.user.id, // Armazena o ID do usuário

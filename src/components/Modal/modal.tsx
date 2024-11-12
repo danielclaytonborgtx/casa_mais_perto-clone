@@ -3,7 +3,7 @@ import { Modal as RNModal, View, Text, TouchableOpacity, Animated } from 'react-
 import { styles } from './styles';
 import { User as IconUser } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
-import { useAuth } from '../../services/auth'; // Importe o contexto de autenticação
+import { useAuth } from '../../services/auth'; 
 
 interface ModalProps {
   visible: boolean;
@@ -14,7 +14,7 @@ const Modal: React.FC<ModalProps> = ({ visible, onClose }) => {
   const slideAnim = useRef(new Animated.Value(-300)).current; 
   const [showModal, setShowModal] = useState(visible);
   const router = useRouter();
-  const { user, isAuthenticated } = useAuth(); // Obtenha o usuário e a autenticação
+  const { user, isAuthenticated } = useAuth(); 
 
   useEffect(() => {
     if (visible) {
@@ -42,9 +42,9 @@ const Modal: React.FC<ModalProps> = ({ visible, onClose }) => {
 
   const handleAddProperty = () => {
     if (isAuthenticated) {
-      handleNavigation('/AddProduct/addProduct'); // Direciona para a página de adicionar imóvel
+      handleNavigation('/AddProduct/addProduct'); 
     } else {
-      handleNavigation('/Login/login'); // Direciona para a página de login
+      handleNavigation('/Login/login'); 
     }
   };
 
@@ -55,10 +55,10 @@ const Modal: React.FC<ModalProps> = ({ visible, onClose }) => {
       onRequestClose={onClose}
     >
       <TouchableOpacity style={styles.container} onPress={onClose}>
-        <Animated.View style={[styles.modalContent, { transform: [{ translateX: slideAnim }] }]}>
+        <Animated.View style={[styles.modalContent, { transform: [{ translateX: slideAnim }] }]} >
           <View style={styles.sidebar}>
             {isAuthenticated && user ? ( // Verifica se user não é null
-              <TouchableOpacity onPress={() => handleNavigation('/Profile/profile')} style={styles.buttonText}>
+              <TouchableOpacity onPress={() => handleNavigation('/Profile/profile')} style={styles.userButton}>
                 <Text style={styles.buttonText}>{user.username}</Text>
               </TouchableOpacity>
             ) : (

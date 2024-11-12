@@ -1,4 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
+const screenWidth = Dimensions.get('window').width;
 
 export const styles = StyleSheet.create({
   container: {
@@ -20,21 +22,23 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 20,
   },
+  
   image: {
-    width: 350,
-    height: 250,
+    width: screenWidth - 40,  
+    height: 300,              
     borderRadius: 8,
-    marginRight: 10,
+    marginRight: 15,         
   },
   modalImageContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
+ 
   modalImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'contain',
+    width: '100%',          
+    height: '100%',          
+    resizeMode: 'contain',   
   },
   errorContainer: {
     padding: 20,

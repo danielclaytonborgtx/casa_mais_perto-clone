@@ -1,25 +1,23 @@
 import { StyleSheet } from 'react-native';
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
+    flex: 1,
     padding: 20,
     backgroundColor: '#fff',
     borderRadius: 10,
+    margin: 20,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 5,
-    marginBottom: 20,
+    elevation: 3,
   },
-  title: {
-    fontSize: 20,
-    marginBottom: 10,
+  label: {
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
+    marginBottom: 5,
   },
   input: {
     height: 40,
@@ -29,48 +27,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 15,
   },
-  detailsInput: {
-    height: 80,
-    textAlignVertical: 'top',
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
   },
-  map: {
-    width: '100%',
-    height: 350,
-    borderRadius: 10,
+  errorText: {
+    color: 'red',
+    fontSize: 16,
+    textAlign: 'center',
     marginBottom: 20,
   },
-  button: {
-    backgroundColor: '#28a745',
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginBottom: 50,
-  },
-  imageButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  loading: {
+    flex: 1,
     justifyContent: 'center',
-    backgroundColor: '#007bff',
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 15,
-  },
-  buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  linkText: {
-    color: '#FF7F50',
-    textAlign: 'center',
-    marginTop: 10,
-    fontSize: 14,
-  },
-  mapInstruction: {
-    fontSize: 14,
-    color: '#555',
-    marginBottom: 10, // Espaço entre a instrução e o mapa
-    textAlign: 'center', // Centraliza o texto
+    alignItems: 'center',
   },
 });
 

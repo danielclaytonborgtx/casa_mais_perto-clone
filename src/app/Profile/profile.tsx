@@ -19,22 +19,24 @@ const Profile = () => {
   }
 
   useEffect(() => {
+    // Verificar se o user e o user.id estão disponíveis antes de buscar imóveis
+    if (!user?.id) {
+      setError('Usuário não autenticado');
+      setLoading(false);
+      return;
+    }
+
     const fetchImoveis = async () => {
-      if (user && user.id) {
-        try {
-          const response = await fetch(`http://192.168.100.6:3000/imoveis/user?userId=${user.id}`);
-          if (!response.ok) {
-            throw new Error('Falha ao buscar imóveis');
-          }
-          const data = await response.json();
-          setImoveis(data);
-        } catch (error) {
-          console.error("Erro ao buscar imóveis:", error);
-          setError('Erro ao buscar imóveis. Tente novamente mais tarde.');
-        } finally {
-          setLoading(false);
+      try {
+        const response = await fetch(`https://casa-mais-perto-server-clone-production.up.railway.app/imoveis/user?userId=${user.id}`);
+        if (!response.ok) {
+          throw new Error('Falha ao buscar imóveis');
         }
-      } else {
+        const data = await response.json();
+        setImoveis(data);
+      } catch (error) {
+        setError('Este usuário ainda não tem imóveis.');
+      } finally {
         setLoading(false);
       }
     };
@@ -42,20 +44,24 @@ const Profile = () => {
     fetchImoveis();
   }, [user]);
 
+  const handlePress = (imovelId: number) => {
+    router.push(`/ProductDetail/${String(imovelId)}`);
+  };
+
   const handleLogout = async () => {
     await logout();
     router.replace('/'); 
   };
 
-  const handleEdit = (imovelId: number) => {
+  const handleEdit = (imovelId: number | undefined) => {
     if (imovelId) {
-      router.push(`/EditProduct/${imovelId}`);
+      router.push(`/EditProduct/${String(imovelId)}`);
     } else {
       console.error('ID do imóvel inválido:', imovelId);
     }
   };
 
-  // Excluir o imóvel e as imagens associadas
+  // Função para excluir imóvel com alerta de confirmação
   const handleDelete = async (imovelId: number) => {
     Alert.alert(
       "Excluir Imóvel",
@@ -66,22 +72,28 @@ const Profile = () => {
           text: "Excluir",
           onPress: async () => {
             try {
-              // Primeiro, busque as imagens associadas ao imóvel
-              const imagensResponse = await fetch(`http://192.168.100.6:3000/imagens/imovel/${imovelId}`);
+              // Buscar as imagens associadas ao imóvel
+              const imagensResponse = await fetch(`https://casa-mais-perto-server-clone-production.up.railway.app/imagens/imovel/${imovelId}`);
               const imagens: Imagem[] = await imagensResponse.json();
-  
-              // Excluir todas as imagens associadas
-              await Promise.all(imagens.map((imagem: Imagem) => {
-                return fetch(`http://192.168.100.6:3000/imagens/${imagem.id}`, {
-                  method: 'DELETE',
-                });
-              }));
-  
-              // Agora excluir o imóvel
-              const response = await fetch(`http://192.168.100.6:3000/imoveis/${imovelId}`, {
+
+              // Excluir cada imagem associada
+              if (imagens.length > 0) {
+                await Promise.all(imagens.map((imagem: Imagem) => {
+                  return fetch(`https://casa-mais-perto-server-clone-production.up.railway.app/imagens/${imagem.id}`, {
+                    method: 'DELETE',
+                  }).then((response) => {
+                    if (!response.ok) {
+                      throw new Error(`Falha ao excluir imagem com ID ${imagem.id}`);
+                    }
+                  });
+                }));
+              }
+
+              // Excluir o imóvel após excluir as imagens
+              const response = await fetch(`https://casa-mais-perto-server-clone-production.up.railway.app/imoveis/${imovelId}`, {
                 method: 'DELETE',
               });
-  
+
               if (response.ok) {
                 setImoveis((prevImoveis) => prevImoveis.filter((imovel) => imovel.id !== imovelId));
                 Alert.alert('Sucesso', 'Imóvel excluído com sucesso');
@@ -89,7 +101,6 @@ const Profile = () => {
                 throw new Error('Erro ao excluir imóvel');
               }
             } catch (error) {
-              console.error("Erro ao excluir imóvel:", error);
               Alert.alert('Erro ao excluir o imóvel. Tente novamente.');
             }
           },
@@ -108,7 +119,9 @@ const Profile = () => {
           </TouchableOpacity>
         </View>
 
-        {error ? (
+        {loading ? (
+          <ActivityIndicator size="large" color="#000" />
+        ) : error ? (
           <Text style={styles.errorText}>{error}</Text>
         ) : imoveis.length === 0 ? (
           <Text style={styles.noImoveisText}>Nenhum imóvel encontrado.</Text>
@@ -118,16 +131,19 @@ const Profile = () => {
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
               <View style={styles.propertyCard}>
-                <View style={styles.propertyDetails}>
+                <TouchableOpacity onPress={() => handlePress(item.id)} style={styles.propertyDetails}>
                   <Text style={styles.propertyTitle}>{item.titulo}</Text>
                   <Text style={styles.propertyValue}>
-                    Valor: R$ {item.valor !== null && item.valor !== undefined ? item.valor.toFixed(2).replace('.', ',') : 'N/A'}
+                    Valor: R$ {item.valor !== null && item.valor !== undefined ? item.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : 'N/A'}
                   </Text>
                   <Text>{item.descricao}</Text>
-                </View>
+                </TouchableOpacity>
+
                 <View style={styles.imagesContainer}>
                   {item.imagens.length > 0 && (
-                    <Image source={{ uri: item.imagens[0].url }} style={styles.image} />
+                    <TouchableOpacity onPress={() => handlePress(item.id)}>
+                      <Image source={{ uri: item.imagens[0].url }} style={styles.image} />
+                    </TouchableOpacity>
                   )}
                   <View style={styles.iconContainer}>
                     <TouchableOpacity onPress={() => handleEdit(item.id)} style={styles.editIcon}>

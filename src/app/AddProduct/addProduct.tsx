@@ -3,16 +3,16 @@ import { View, TextInput, TouchableOpacity, Text, Alert, Image, ScrollView } fro
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as ImagePicker from 'expo-image-picker';
-import { useRouter } from 'expo-router'; // Importando useRouter
+import { useRouter } from 'expo-router';
 import styles from './styles';
 import { useAuth } from '../../services/auth';
 
 const AddProduct = () => {
   const { user } = useAuth();
-  const router = useRouter(); // Inicializando o router
+  const router = useRouter();
   const [name, setName] = useState('');
   const [images, setImages] = useState<string[]>([]);
-  const [price, setPrice] = useState('');
+  const [price, setPrice] = useState<number>(0); 
   const [details, setDetails] = useState('');
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
@@ -26,7 +26,7 @@ const AddProduct = () => {
         return;
       }
 
-      const currentLocation = await Location.getCurrentPositionAsync({});
+      const currentLocation = await Location.getCurrentPositionAsync({});  
       setLatitude(currentLocation.coords.latitude);
       setLongitude(currentLocation.coords.longitude);
       setLoading(false);
@@ -35,28 +35,34 @@ const AddProduct = () => {
     getCurrentLocation();
   }, []);
 
+  // Função para formatar o preço
+  const formatPrice = (value: string) => {
+    // Remove tudo que não for número
+    const numericValue = value.replace(/[^\d]/g, '');
+    
+    // Converte para número
+    const numberValue = parseFloat(numericValue) / 100;  // Dividir por 100 para tratar como valores em centavos
+    // Formata o valor
+    return numberValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  };
+
   const handleAddProduct = async () => {
-    if (!name || images.length === 0 || !price || !details) {
+    if (!name || images.length === 0 || price <= 0 || !details) {
       Alert.alert('Erro', 'Por favor, preencha todos os campos.');
       return;
     }
 
-    const parsedPrice = parseFloat(price);
-    if (isNaN(parsedPrice) || parsedPrice <= 0) {
-      Alert.alert('Erro', 'O preço deve ser um número válido e positivo.');
-      return;
-    }
-
     try {
-      const response = await fetch('http://192.168.100.6:3000/imoveis', {
+      const response = await fetch('https://casa-mais-perto-server-clone-production.up.railway.app/imoveis', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           titulo: name,
+          valor: price,
           descricao: details,
-          imagens: images, // Correção aqui
+          imagens: images,
           userId: user?.id,
           latitude,
           longitude,
@@ -73,7 +79,7 @@ const AddProduct = () => {
       console.log(data);
       Alert.alert('Sucesso', 'Produto adicionado com sucesso!');
       clearFields();
-      router.push('/Profile/profile'); // Redireciona para a página de perfil após adicionar o imóvel
+      router.push('/Profile/profile');
     } catch (error) {
       const errorMessage = (error as Error).message || 'Falha ao adicionar produto. Tente novamente.';
       console.error('Error:', error);
@@ -84,7 +90,7 @@ const AddProduct = () => {
   const clearFields = () => {
     setName('');
     setImages([]);
-    setPrice('');
+    setPrice(0); 
     setDetails('');
     setLatitude(0);
     setLongitude(0);
@@ -119,18 +125,25 @@ const AddProduct = () => {
 
       <TextInput
         placeholder="Preço"
-        value={price}
-        onChangeText={setPrice}
+        value={price ? formatPrice(price.toString()) : ''} 
+        onChangeText={(text) => {
+          const unformattedPrice = parseFloat(text.replace(/[^\d]/g, '')); 
+          setPrice(unformattedPrice); 
+        }}
         keyboardType="numeric"
         style={styles.input}
       />
 
       <TextInput
-        placeholder="Detalhes"
+        placeholder="Descrição"
         value={details}
         onChangeText={setDetails}
-        style={styles.input}
+        style={[styles.input, styles.detailsInput]} 
+        multiline
+        numberOfLines={4} 
+        textAlignVertical="top" 
       />
+
 
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom: 10 }}>
         {images.map((img, index) => (

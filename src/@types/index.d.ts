@@ -1,7 +1,7 @@
-// src/@types/index.d.ts
+
 export interface User {
     id: number;
-    username: string; // Adicione esta propriedade se não estiver presente
+    username: string; 
   }
   
   export interface Imovel {

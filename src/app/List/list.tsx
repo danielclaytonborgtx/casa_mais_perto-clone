@@ -14,7 +14,7 @@ const ListScreen: React.FC = () => {
   useEffect(() => {
     const fetchImoveis = async () => {
       try {
-        const response = await fetch('http://192.168.100.6:3000/imoveis');
+        const response = await fetch('https://casa-mais-perto-server-clone-production.up.railway.app/imoveis');
         if (!response.ok) {
           throw new Error('Falha ao buscar imóveis');
         }
@@ -54,7 +54,7 @@ const ListScreen: React.FC = () => {
                 <View style={styles.propertyInfo}>
                   <Text style={styles.propertyTitle}>{item.titulo}</Text>
                   <Text style={styles.propertyValue}>
-                    Valor: R$ {item.valor !== null && item.valor !== undefined ? item.valor.toFixed(2).replace('.', ',') : 'N/A'}
+                      Valor: R$ {item.valor !== null && item.valor !== undefined ? item.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : 'N/A'}
                   </Text>
                 </View>
                 <Image source={{ uri: item.imagens[0]?.url }} style={styles.image} />

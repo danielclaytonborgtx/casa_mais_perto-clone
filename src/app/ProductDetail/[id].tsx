@@ -26,7 +26,7 @@ const ProductDetail: React.FC = () => {
 
   const fetchProduct = async () => {
     try {
-      const response = await fetch(`http://192.168.100.6:3000/imoveis/${productId}`);
+      const response = await fetch(`https://casa-mais-perto-server-clone-production.up.railway.app/imoveis/${productId}`);
       if (!response.ok) {
         throw new Error('Falha ao buscar detalhes do imóvel');
       }
@@ -77,7 +77,7 @@ const ProductDetail: React.FC = () => {
       </ScrollView>
       <Text style={styles.title}>{product?.titulo}</Text>
       <Text style={styles.value}>
-        Valor: R$ {product?.valor ? product.valor.toFixed(2).replace('.', ',') : 'N/A'}
+        Valor: R$ {product?.valor ? product.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : 'N/A'}
       </Text>
       <Text style={styles.description}>{product?.descricao}</Text>
 

@@ -5,37 +5,43 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
-    alignItems: 'flex-start', // Alinha ao início
+    alignItems: 'flex-start', 
   },
   modalContent: {
-    width: '50%', // Largura do modal
-    height: '80%', // Ajuste a altura para não cobrir o header e footer
+    width: '70%',
+    height: '80%',
     backgroundColor: '#FFA07A',
     padding: 20,
     borderTopRightRadius: 10,
     borderBottomRightRadius: 10,
     position: 'absolute',
-    left: 0, // Para começar na esquerda
-    top: '10%', // Para dar um espaço do topo
+    left: 0, 
+    top: '10%', 
   },
   button: {
     flexDirection: 'row',
     alignItems: 'center',
-    // backgroundColor: '#FF7F50', // Cor do botão
     padding: 20,
     borderRadius: 5,
-    
     marginVertical: 2,
-    width: '100%', // Para ocupar toda a largura
+    width: '100%',
   },
   buttonText: {
-    color: 'black', // Cor do texto do botão
-    marginLeft: 10, // Espaçamento entre o ícone e o texto
+    color: 'black',
+    marginLeft: 10,
     fontSize: 18,
   },
   sidebar: {
     flex: 1,
-    justifyContent: 'flex-start', // Alinha os itens ao topo
+    justifyContent: 'flex-start', 
   },
   
+  userButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 20,
+    borderRadius: 5,
+    marginBottom: 20,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+    width: '100%',
+  }
 });

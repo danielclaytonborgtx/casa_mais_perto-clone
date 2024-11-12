@@ -22,7 +22,7 @@ const SignUp = () => {
     }
 
     try {
-      const response = await axios.post('http://192.168.100.6:3000/register', { username, password }); // Alterado para usar username
+      const response = await axios.post('https://casa-mais-perto-server-clone-production.up.railway.app/register', { username, password }); // Alterado para usar username
       
       if (response.status === 201) {
         Alert.alert('Sucesso', 'Conta criada com sucesso! Você pode fazer login agora.');

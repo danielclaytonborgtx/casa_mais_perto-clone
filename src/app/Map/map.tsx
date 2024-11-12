@@ -42,7 +42,7 @@ const MapScreen: React.FC = () => {
 
     const fetchImoveis = async () => {
       try {
-        const response = await fetch('http://192.168.100.6:3000/imoveis');
+        const response = await fetch('https://casa-mais-perto-server-clone-production.up.railway.app/imoveis');
         if (!response.ok) {
           throw new Error('Falha ao buscar imóveis');
         }
@@ -84,11 +84,11 @@ const MapScreen: React.FC = () => {
       // Animação suave para o mapa
       Animated.timing(animatedRegion, {
         toValue: 1,
-        duration: 1000, // Ajuste o tempo de animação conforme necessário
+        duration: 1000,
         useNativeDriver: false,
       }).start(() => {
         if (mapRef.current) {
-          mapRef.current.animateToRegion(region, 1000); // Ajuste o tempo de animação conforme necessário
+          mapRef.current.animateToRegion(region, 1000); 
         }
       });
     }
