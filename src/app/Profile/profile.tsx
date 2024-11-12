@@ -146,9 +146,9 @@ const Profile = () => {
                     </TouchableOpacity>
                   )}
                   <View style={styles.iconContainer}>
-                    <TouchableOpacity onPress={() => handleEdit(item.id)} style={styles.editIcon}>
+                    {/* <TouchableOpacity onPress={() => handleEdit(item.id)} style={styles.editIcon}>
                       <MaterialCommunityIcons name="pencil" size={20} color="#000" />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <TouchableOpacity onPress={() => handleDelete(item.id)} style={styles.deleteIcon}>
                       <MaterialCommunityIcons name="trash-can" size={20} color="black" />
                     </TouchableOpacity>
