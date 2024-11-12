@@ -1,0 +1,45 @@
+name: Build Android with Expo
+
+on:
+  push:
+    branches:
+      - main  # Aciona o workflow quando houver push no branch 'main'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # O workflow irá rodar em um ambiente Ubuntu.
+
+    steps:
+      # Passo 1: Checkout do código
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Passo 2: Configurar o Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # Defina a versão do Node.js que você usa no seu projeto.
+
+      # Passo 3: Instalar dependências
+      - name: Install dependencies
+        run: |
+          npm install  # Ou `yarn install`, caso use o Yarn.
+
+      # Passo 4: Instalar o EAS CLI (caso use Expo para build)
+      - name: Install EAS CLI
+        run: npm install -g eas-cli
+
+      # Passo 5: Login no Expo (se necessário)
+      - name: EAS login
+        run: eas login --token ${{ secrets.EAS_TOKEN }}  # Token de acesso do Expo. Você criará um token no Expo.
+
+      # Passo 6: Criar o APK Android com o Expo EAS
+      - name: Build Android APK
+        run: eas build --platform android --non-interactive
+
+      # Passo 7: Upload do APK como artefato (para download)
+      - name: Upload APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: android-apk
+          path: ./build/*.apk  # Ajuste o caminho conforme o local onde o APK é gerado.
