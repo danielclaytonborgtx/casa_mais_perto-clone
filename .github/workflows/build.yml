@@ -27,20 +27,30 @@ jobs:
       - name: Install EAS CLI
         run: npm install -g eas-cli
 
-      # Passo 5: Login no Expo usando o token EAS
+      # Passo 5: Verificar Disponibilidade do EAS_TOKEN
+      - name: Check EAS_TOKEN Availability
+        run: echo "EAS_TOKEN is set"
+        env:
+          EAS_TOKEN: ${{ secrets.EAS_TOKEN }}
+
+      # Passo 6: Login no Expo usando o token EAS
       - name: EAS login
         env:
           EAS_TOKEN: ${{ secrets.EAS_TOKEN }}  # Referência ao token guardado no GitHub Secrets
         run: |
           eas whoami || eas login --token $EAS_TOKEN
 
-      # Passo 6: Criar o APK Android com o Expo EAS
+      # Passo 7: Criar o APK Android com o Expo EAS
       - name: Build Android APK
         run: eas build --platform android --non-interactive
 
-      # Passo 7: Upload do APK como artefato (para download)
+      # Passo 8: Upload do APK como artefato (para download)
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
           name: android-apk
-          path: ./build/*.apk  # Ajuste o caminho conforme o local onde o APK é gerado.
+          path: "./**/*.apk"  # Busca o APK em todos os diretórios para garantir o upload correto.
+
+      # Passo 9: Limpar o EAS_TOKEN (opcional para segurança)
+      - name: Clear EAS_TOKEN
+        run: unset EAS_TOKEN
