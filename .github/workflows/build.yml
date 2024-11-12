@@ -31,7 +31,7 @@ jobs:
 
       # Passo 5: Login no Expo (se necessário)
       - name: EAS login
-        run: eas login --token ${{ secrets.EAS_TOKEN }}  # Token de acesso do Expo. Você criará um token no Expo.
+        run: eas login --token ${{ secrets.EAS_TOKEN }}  
 
       # Passo 6: Criar o APK Android com o Expo EAS
       - name: Build Android APK
