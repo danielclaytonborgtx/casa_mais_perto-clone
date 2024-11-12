@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "casaMaisPerto",
-    "slug": "casaMaisPerto",
+    "slug": "casamaispertoclone",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -37,8 +37,12 @@
       "WEB_CLIENT_ID": "468088106800-u09gf684knj0hmb1h3f6lg8pjvvfmite.apps.googleusercontent.com",
       "API_URL": "https://casa-mais-perto-server-clone.up.railway.app",
       "eas": {
-        "projectId": "fcdf2149-d82a-4067-9ac5-fd74ff25aaf0"
+        "projectId": "d6e51a52-6b27-4f45-a557-3ef9a3cbc5ec"
+      },
+      "router": {
+        "origin": false
       }
-    }
+    },
+    "owner": "devdelta"
   }
 }
