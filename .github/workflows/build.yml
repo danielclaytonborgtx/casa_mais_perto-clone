@@ -1,20 +1,18 @@
-name: Build APK
-
 on:
   push:
     branches:
-      - master  # Executa o workflow em pushes no branch 'master'
+      - master  # Aciona o workflow quando houver push no branch 'master'
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # Utiliza o ambiente Ubuntu mais recente
+    runs-on: ubuntu-latest  # O workflow irá rodar em um ambiente Ubuntu.
 
     steps:
       # Passo 1: Checkout do código
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Passo 2: Configurar Node.js
+      # Passo 2: Configurar o Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -22,27 +20,27 @@ jobs:
 
       # Passo 3: Instalar dependências
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install
 
       # Passo 4: Instalar o EAS CLI
       - name: Install EAS CLI
         run: npm install -g eas-cli
 
-      # Passo 5: Teste de Disponibilidade do EAS_TOKEN
-      - name: Check EAS_TOKEN Availability
+      # Passo 5: Login no Expo usando o token EAS
+      - name: EAS login
         env:
-          EAS_TOKEN: ${{ secrets.EAS_TOKEN }}
+          EAS_TOKEN: ${{ secrets.EAS_TOKEN }}  # Referência ao token guardado no GitHub Secrets
         run: |
-          if [ -z "$EAS_TOKEN" ]; then
-            echo "EAS_TOKEN não está disponível!"
-            exit 1
-          else
-            echo "EAS_TOKEN está disponível."
-          fi
+          echo $EAS_TOKEN | eas login --token
 
-      # Passo 6: Login no EAS (Exemplo simplificado)
-      - name: EAS Login
-        env:
-          EAS_TOKEN: ${{ secrets.EAS_TOKEN }}
-        run: |
-          eas whoami || eas login --token $EAS_TOKEN
+      # Passo 6: Criar o APK Android com o Expo EAS
+      - name: Build Android APK
+        run: eas build --platform android --non-interactive
+
+      # Passo 7: Upload do APK como artefato (para download)
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: android-apk
+          path: ./build/*.apk  # Ajuste o caminho conforme o local onde o APK é gerado.
