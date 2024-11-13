@@ -134,7 +134,7 @@ const Profile = () => {
                 <TouchableOpacity onPress={() => handlePress(item.id)} style={styles.propertyDetails}>
                   <Text style={styles.propertyTitle}>{item.titulo}</Text>
                   <Text style={styles.propertyValue}>
-                    Valor: R$ {item.valor !== null && item.valor !== undefined ? item.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : 'N/A'}
+                    Valor: R$ {item.valor ? (item.valor / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : 'N/A'}
                   </Text>
                   <Text>{item.descricao}</Text>
                 </TouchableOpacity>

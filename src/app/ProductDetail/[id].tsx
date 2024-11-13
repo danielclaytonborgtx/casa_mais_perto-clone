@@ -77,8 +77,9 @@ const ProductDetail: React.FC = () => {
       </ScrollView>
       <Text style={styles.title}>{product?.titulo}</Text>
       <Text style={styles.value}>
-        Valor: R$ {product?.valor ? product.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : 'N/A'}
+        Valor: R$ {product?.valor ? (product.valor / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : 'N/A'}
       </Text>
+
       <Text style={styles.description}>{product?.descricao}</Text>
 
       {/* Modal for Image Viewer */}

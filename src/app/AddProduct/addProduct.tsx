@@ -35,16 +35,10 @@ const AddProduct = () => {
     getCurrentLocation();
   }, []);
 
-  // Função para formatar o preço
-  const formatPrice = (value: string) => {
-    // Remove tudo que não for número
-    const numericValue = value.replace(/[^\d]/g, '');
-    
-    // Converte para número
-    const numberValue = parseFloat(numericValue) / 100;  // Dividir por 100 para tratar como valores em centavos
-    // Formata o valor
-    return numberValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-  };
+// Função para formatar o valor como moeda, baseado no valor em centavos
+const formatPrice = (value: number) => {
+  return (value / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+};
 
   const handleAddProduct = async () => {
     if (!name || images.length === 0 || price <= 0 || !details) {
@@ -123,16 +117,17 @@ const AddProduct = () => {
         style={styles.input}
       />
 
-      <TextInput
-        placeholder="Preço"
-        value={price ? formatPrice(price.toString()) : ''} 
-        onChangeText={(text) => {
-          const unformattedPrice = parseFloat(text.replace(/[^\d]/g, '')); 
-          setPrice(unformattedPrice); 
-        }}
-        keyboardType="numeric"
-        style={styles.input}
-      />
+<TextInput
+  placeholder="Preço"
+  value={price ? formatPrice(price) : ''}  // Exibe o valor formatado
+  onChangeText={(text) => {
+    const numericText = text.replace(/\D/g, ''); // Remove tudo que não for número
+    const centavos = parseInt(numericText, 10); // Converte para número em centavos
+    setPrice(isNaN(centavos) ? 0 : centavos); // Atualiza o estado em centavos
+  }}
+  keyboardType="numeric"
+  style={styles.input}
+/>
 
       <TextInput
         placeholder="Descrição"

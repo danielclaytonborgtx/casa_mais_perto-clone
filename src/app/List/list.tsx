@@ -54,7 +54,7 @@ const ListScreen: React.FC = () => {
                 <View style={styles.propertyInfo}>
                   <Text style={styles.propertyTitle}>{item.titulo}</Text>
                   <Text style={styles.propertyValue}>
-                      Valor: R$ {item.valor !== null && item.valor !== undefined ? item.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : 'N/A'}
+                      Valor: R$ {item.valor ? (item.valor / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : 'N/A'}
                   </Text>
                 </View>
                 <Image source={{ uri: item.imagens[0]?.url }} style={styles.image} />
