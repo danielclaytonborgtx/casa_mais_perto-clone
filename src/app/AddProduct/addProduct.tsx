@@ -117,17 +117,17 @@ const formatPrice = (value: number) => {
         style={styles.input}
       />
 
-<TextInput
-  placeholder="Preço"
-  value={price ? formatPrice(price) : ''}  // Exibe o valor formatado
-  onChangeText={(text) => {
-    const numericText = text.replace(/\D/g, ''); // Remove tudo que não for número
-    const centavos = parseInt(numericText, 10); // Converte para número em centavos
-    setPrice(isNaN(centavos) ? 0 : centavos); // Atualiza o estado em centavos
-  }}
-  keyboardType="numeric"
-  style={styles.input}
-/>
+      <TextInput
+        placeholder="Preço"
+        value={price ? formatPrice(price) : ''}  
+        onChangeText={(text) => {
+          const numericText = text.replace(/\D/g, ''); 
+          const centavos = parseInt(numericText, 10); 
+          setPrice(isNaN(centavos) ? 0 : centavos); 
+        }}
+        keyboardType="numeric"
+        style={styles.input}
+      />
 
       <TextInput
         placeholder="Descrição"
